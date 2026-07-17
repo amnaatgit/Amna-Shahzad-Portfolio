@@ -238,7 +238,7 @@ function About() {
     <section className="section" id="about">
       <FadeUp>
        
-        <h2 className="section-title">About me</h2>
+        <h2 className="nav-logo">About me</h2>
       </FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
