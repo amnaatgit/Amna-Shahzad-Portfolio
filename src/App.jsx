@@ -221,7 +221,7 @@ function About() {
   return (
     <section className="section" id="about">
       <FadeUp>
-  <div className="section-label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+  <div className="section-label">
     <span style={{ 
       color: '#4A90D9', 
       fontWeight: 600,
@@ -229,12 +229,6 @@ function About() {
       letterSpacing: '1px'
     }}>
       Who I am
-    </span>
-    <span style={{ 
-      color: 'var(--text2)', 
-      fontSize: '1rem'
-    }}>
-      —
     </span>
   </div>
   
