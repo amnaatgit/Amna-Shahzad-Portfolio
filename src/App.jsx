@@ -114,7 +114,7 @@ const DATAVIZ = [
     link:null, color:'#a3e635',
   },
   {
-    id:6, title:'HR Analytics Board', tool:'Power BI',
+    id:6, title:'HR Analytics Board', tool:'Tableau',
     image:'/images/hr.png',
     link:null, color:'#818cf8',
   },
