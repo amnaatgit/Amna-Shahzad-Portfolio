@@ -222,7 +222,10 @@ function About() {
     <section className="section" id="about">
       <FadeUp>
         <div className="section-label">About me</div>
-        <h2 className="section-title">Full-stack development<br/>meets data storytelling</h2>
+        <h2 className="section-title">  
+            <span style={{display:'block',color:'var(--text2)',fontSize:'55%',fontWeight:400,marginBottom:6}}>Who I am </span>
+            <span className="name-grad">About me</span>
+          </h2>
       </FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
