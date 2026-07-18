@@ -120,6 +120,39 @@ const DATAVIZ = [
   },
 ]
 
+const CERTIFICATIONS = [
+  {
+    id:1, title:'Full Stack Web Development Bootcamp', issuer:'Udemy',
+    link:'https://www.udemy.com/certificate/UC-6a410c36-b4c8-4c89-b9fc-cc081114e709/',
+    accent:'#fb7185', icon:'💻',
+  },
+  {
+    id:2, title:'AI for Data Analysis', issuer:'Google · Coursera',
+    link:'https://www.coursera.org/account/accomplishments/certificate/HVZ4W4C4HW9Y',
+    accent:'#fbbf24', icon:'📈',
+  },
+  {
+    id:3, title:'AI for App Building', issuer:'Google · Coursera',
+    link:'https://www.coursera.org/account/accomplishments/certificate/38LWZAEQKD8Q',
+    accent:'#fb923c', icon:'🛠️',
+  },
+  {
+    id:4, title:'What is Data Science?', issuer:'IBM · Coursera',
+    link:'https://www.coursera.org/account/accomplishments/verify/YACNN3MLNNLJ',
+    accent:'#f472b6', icon:'🧬',
+  },
+  {
+    id:5, title:'AI For Everyone', issuer:'DeepLearning.AI · Coursera',
+    link:'https://www.coursera.org/account/accomplishments/verify/GBWG1QD5L3V9',
+    accent:'#c084fc', icon:'🤖',
+  },
+  {
+    id:6, title:'Google AI Essentials', issuer:'Google · Coursera',
+    link:'https://www.coursera.org/account/accomplishments/specialization/1WXSUAFQ34JE',
+    accent:'#fda4af', icon:'✨',
+  },
+]
+
 const SKILLS = [
   { label:'Frontend',   chips:['React','Vite','Tailwind CSS','HTML/CSS','JavaScript','AngularJS'] },
   { label:'Backend',    chips:['Node.js','Express','FastAPI','Python','REST APIs','JWT Auth'] },
@@ -144,6 +177,7 @@ function Nav() {
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#dataviz">Data Viz</a>
+        <a href="#certifications">Certifications</a>
         <a href="#education">Education</a>
         <a href="https://www.linkedin.com/in/amna-shahzad-393955356/" className="nav-cta" target="_blank" rel="noreferrer">Let's Connect</a>
       </div>
@@ -237,8 +271,8 @@ function About() {
   return (
     <section className="section" id="about">
       <FadeUp>
-        <div className="section-label">Who I am</div>
-        <h2 className="section-title">About me</h2>
+        <div className="section-label">About me</div>
+        <h2 className="section-title">Where full-stack development<br/>meets data storytelling</h2>
       </FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
@@ -511,6 +545,96 @@ function DataViz() {
   )
 }
 
+function CertCard({ c, i }) {
+  return (
+    <FadeUp delay={i*70}>
+      <a
+        href={c.link}
+        target="_blank"
+        rel="noreferrer"
+        style={{
+          display:'block', textDecoration:'none', height:'100%',
+          borderRadius:16, padding:'22px 20px',
+          background:'linear-gradient(160deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015))',
+          border:'1px solid rgba(255,255,255,0.08)',
+          position:'relative', overflow:'hidden',
+          transition:'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+        }}
+        onMouseOver={e => {
+          e.currentTarget.style.transform = 'translateY(-4px)'
+          e.currentTarget.style.borderColor = `${c.accent}55`
+          e.currentTarget.style.boxShadow = `0 14px 34px -12px ${c.accent}40`
+        }}
+        onMouseOut={e => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
+      >
+        <div style={{
+          position:'absolute', top:-40, right:-40, width:120, height:120, borderRadius:'50%',
+          background:`radial-gradient(circle, ${c.accent}30, transparent 70%)`,
+        }}/>
+        <div style={{
+          width:44, height:44, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center',
+          fontSize:20, background:`${c.accent}18`, border:`1px solid ${c.accent}40`, marginBottom:16,
+        }}>
+          {c.icon}
+        </div>
+        <div style={{
+          fontSize:11, fontWeight:700, letterSpacing:'0.06em', textTransform:'uppercase',
+          color:c.accent, marginBottom:8,
+        }}>
+          {c.issuer}
+        </div>
+        <div style={{ fontSize:16, fontWeight:700, color:'var(--text)', lineHeight:1.35, marginBottom:14 }}>
+          {c.title}
+        </div>
+        <div style={{
+          display:'inline-flex', alignItems:'center', gap:6, fontSize:12.5, fontWeight:600, color:c.accent,
+        }}>
+          View Certificate
+          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </div>
+      </a>
+    </FadeUp>
+  )
+}
+
+function Certifications() {
+  return (
+    <section className="section" id="certifications">
+      <FadeUp>
+        <div className="section-label" style={{ color:'#f472b6' }}>
+          <span style={{
+            display:'inline-block', width:6, height:6, borderRadius:'50%',
+            background:'#f472b6', marginRight:6, verticalAlign:'middle',
+          }}/>
+          Certifications
+        </div>
+        <h2 className="section-title">
+          <span style={{
+            background:'linear-gradient(90deg,#fb7185,#fbbf24,#c084fc)',
+            WebkitBackgroundClip:'text', backgroundClip:'text', color:'transparent',
+          }}>Courses & credentials</span>
+        </h2>
+        <p className="section-sub">Continuous learning across web development, AI, and data science — from bootcamps to specialised Coursera programs.</p>
+      </FadeUp>
+      <div
+        style={{
+          display:'grid',
+          gridTemplateColumns:'repeat(auto-fit, minmax(240px, 1fr))',
+          gap:18, marginTop:44,
+        }}
+      >
+        {CERTIFICATIONS.map((c,i) => <CertCard key={c.id} c={c} i={i}/>)}
+      </div>
+    </section>
+  )
+}
+
 function Education() {
   return (
     <section className="section" id="education">
@@ -582,6 +706,8 @@ export default function App() {
       <Projects/>
       <div className="divider"/>
       <DataViz/>
+      <div className="divider"/>
+      <Certifications/>
       <div className="divider"/>
       <Education/>
       <div className="divider"/>
