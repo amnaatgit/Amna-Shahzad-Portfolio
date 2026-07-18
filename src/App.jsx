@@ -271,8 +271,8 @@ function About() {
   return (
     <section className="section" id="about">
       <FadeUp>
-        <div className="section-label">About me</div>
-        <h2 className="section-title">Where full-stack development<br/>meets data storytelling</h2>
+        <div className="section-label">Who I Am</div>
+        <h2 className="section-title">About me</h2>
       </FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
