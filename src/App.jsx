@@ -1,4 +1,31 @@
 import { useState, useEffect, useRef } from 'react'
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const h = e => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', h)
+    document.body.style.overflow = 'hidden'
+    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = '' }
+  }, [onClose])
+  return (
+    <div onClick={onClose} style={{
+      position:'fixed',inset:0,zIndex:1000,
+      background:'rgba(0,0,0,0.92)',backdropFilter:'blur(8px)',
+      display:'flex',alignItems:'center',justifyContent:'center',
+      cursor:'zoom-out',padding:20,
+    }}>
+      <img src={src} alt={alt} onClick={e=>e.stopPropagation()} style={{
+        maxWidth:'92vw',maxHeight:'90vh',borderRadius:12,
+        boxShadow:'0 32px 80px rgba(0,0,0,0.8)',objectFit:'contain',cursor:'default',
+      }}/>
+      <button onClick={onClose} style={{
+        position:'fixed',top:20,right:24,background:'rgba(255,255,255,0.1)',
+        border:'1px solid rgba(255,255,255,0.2)',color:'#fff',
+        width:40,height:40,borderRadius:'50%',fontSize:20,cursor:'pointer',
+        display:'flex',alignItems:'center',justifyContent:'center',
+      }}>✕</button>
+    </div>
+  )
+}
 
 /* ── Typewriter ─────────────────────────────────────────────────────── */
 function useTypewriter(words, speed = 80, pause = 1800) {
@@ -298,55 +325,47 @@ function About() {
   )
 }
 
-/* ── Project card ────────────────────────────────────────────────────── */
 function ProjCard({ p, i }) {
+  const [lb, setLb] = useState(false)
   return (
-    <FadeUp delay={i*80}>
-      <div className="project-card">
-        <div className="project-preview">
+    <FadeUp key={p.id} delay={i*70}>
+      {lb && <Lightbox src={p.image} alt={p.title} onClose={() => setLb(false)}/>}
+      <div className="proj-card">
+        <div className="proj-thumb" style={{cursor: p.image ? 'zoom-in' : 'default'}}
+          onClick={() => p.image && setLb(true)}>
           {p.image ? (
             <img src={p.image} alt={p.title} loading="lazy"
-              style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'top',transition:'transform 0.5s ease'}}
-              onMouseOver={e => e.target.style.transform='scale(1.04)'}
-              onMouseOut={e => e.target.style.transform='scale(1)'}
-            />
+              style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'top'}}/>
           ) : (
             <>
-              <div className="project-preview-bg" style={{background:p.gradient}}/>
-              <div className="project-preview-icon">{p.emoji}</div>
+              <div className="proj-thumb-bg" style={{background:p.g,position:'absolute',inset:0}}/>
+              <div style={{position:'relative',zIndex:1,display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
+                <div className="proj-thumb-icon">{p.emoji}</div>
+              </div>
             </>
           )}
-          <div className="project-links-overlay">
-            {p.live ? (
-              <>
-                <a href={p.live} className="overlay-btn overlay-btn-primary" target="_blank" rel="noreferrer">
-                  <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  Live Demo
-                </a>
-                {p.github && (
-                  <a href={p.github} className="overlay-btn overlay-btn-secondary" target="_blank" rel="noreferrer">
-                    <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                    GitHub
-                  </a>
-                )}
-              </>
-            ) : (
-              <div style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',padding:'8px 20px',borderRadius:8,fontSize:13,fontWeight:600,color:'rgba(255,255,255,0.7)'}}>
-                {p.comingSoon ? 'Coming soon' : 'View project'}
-              </div>
+          <div className="proj-overlay" onClick={e => e.stopPropagation()}>
+            {p.image && (
+              <button onClick={e=>{e.stopPropagation();setLb(true)}} className="obtn-s">
+                🔍 View Screenshot
+              </button>
             )}
+            {p.live && <a href={p.live} className="obtn-p" target="_blank" rel="noreferrer">Live Demo</a>}
+            {p.github && <a href={p.github} className="obtn-s" target="_blank" rel="noreferrer">GitHub</a>}
           </div>
         </div>
-        <div className="project-body">
-          <div className="project-tag">{p.tag}</div>
-          <div className="project-title">{p.title}</div>
-          <div className="project-desc">{p.desc}</div>
-          <div className="project-chips">{p.chips.map(c => <span className="project-chip" key={c}>{c}</span>)}</div>
+        <div className="proj-body">
+          <div className="proj-tag">{p.tag}</div>
+          <div className="proj-title">{p.title}</div>
+          <div className="proj-desc">{p.desc}</div>
+          <div className="proj-chips">{p.chips.map(c => <span className="proj-chip" key={c}>{c}</span>)}</div>
         </div>
       </div>
     </FadeUp>
   )
 }
+
+/* ── Project card ────────────────────────────────────────────────────── */
 
 /* ── Viz card ────────────────────────────────────────────────────────── */
 function VizCard({ d, i }) {
@@ -411,7 +430,31 @@ function DataViz() {
         <p className="section-sub">Interactive dashboards built in Tableau, Power BI, and custom HTML/CSS — turning raw datasets into business insights across 5 industries.</p>
       </FadeUp>
       <div className="viz-grid" style={{marginTop:48}}>
-        {DATAVIZ.map((d,i) => <VizCard key={d.id} d={d} i={i}/>)}
+       {DATAVIZ.map((d,i) => {
+  const clr = TC[d.tool]||'#6366f1'
+  const [lb, setLb] = useState(false)
+  return (
+    <FadeUp key={d.id} delay={i*65}>
+      {lb && <Lightbox src={d.image} alt={d.title} onClose={() => setLb(false)}/>}
+      <div className="viz-card">
+        <div className="viz-thumb" style={{cursor:'zoom-in'}} onClick={() => setLb(true)}>
+          <img src={d.image} alt={d.title} loading="lazy"
+            style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'top'}}/>
+          <div className="viz-overlay" onClick={e=>e.stopPropagation()}>
+            <button onClick={e=>{e.stopPropagation();setLb(true)}} className="obtn-s">🔍 View Full</button>
+            {d.link && <a href={d.link} className="obtn-p" target="_blank" rel="noreferrer">Open Dashboard</a>}
+          </div>
+        </div>
+        <div className="viz-body">
+          <div className="viz-tool" style={{color:clr,borderColor:`${clr}40`,background:`${clr}12`}}>{d.tool}</div>
+          <div className="viz-title">{d.title}</div>
+          {d.link ? <a href={d.link} className="viz-link" target="_blank" rel="noreferrer">Open dashboard →</a>
+                  : <span className="viz-link" style={{opacity:.4,cursor:'default'}}>Screenshot only</span>}
+        </div>
+      </div>
+    </FadeUp>
+  )
+})}
       </div>
     </section>
   )
