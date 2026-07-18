@@ -402,14 +402,16 @@ function VizCard({ d, i, onScreenshotClick }) {
 /* ── Lightbox modal ──────────────────────────────────────────────────── */
 function Lightbox({ item, onClose }) {
   useEffect(() => {
+    if (!item) return
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
+      document.body.style.overflow = prevOverflow
     }
-  }, [onClose])
+  }, [item, onClose])
 
   if (!item) return null
 
