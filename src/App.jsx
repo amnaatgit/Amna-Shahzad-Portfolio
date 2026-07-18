@@ -1,31 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-function Lightbox({ src, alt, onClose }) {
-  useEffect(() => {
-    const h = e => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', h)
-    document.body.style.overflow = 'hidden'
-    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = '' }
-  }, [onClose])
-  return (
-    <div onClick={onClose} style={{
-      position:'fixed',inset:0,zIndex:1000,
-      background:'rgba(0,0,0,0.92)',backdropFilter:'blur(8px)',
-      display:'flex',alignItems:'center',justifyContent:'center',
-      cursor:'zoom-out',padding:20,
-    }}>
-      <img src={src} alt={alt} onClick={e=>e.stopPropagation()} style={{
-        maxWidth:'92vw',maxHeight:'90vh',borderRadius:12,
-        boxShadow:'0 32px 80px rgba(0,0,0,0.8)',objectFit:'contain',cursor:'default',
-      }}/>
-      <button onClick={onClose} style={{
-        position:'fixed',top:20,right:24,background:'rgba(255,255,255,0.1)',
-        border:'1px solid rgba(255,255,255,0.2)',color:'#fff',
-        width:40,height:40,borderRadius:'50%',fontSize:20,cursor:'pointer',
-        display:'flex',alignItems:'center',justifyContent:'center',
-      }}>✕</button>
-    </div>
-  )
-}
 
 /* ── Typewriter ─────────────────────────────────────────────────────── */
 function useTypewriter(words, speed = 80, pause = 1800) {
@@ -56,6 +29,35 @@ function FadeUp({ children, delay = 0, className = '' }) {
     obs.observe(el); return () => obs.disconnect()
   }, [])
   return <div ref={ref} className={`fade-up ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>
+}
+
+/* ── Lightbox ────────────────────────────────────────────────────────── */
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const h = e => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', h)
+    document.body.style.overflow = 'hidden'
+    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = '' }
+  }, [onClose])
+  return (
+    <div onClick={onClose} style={{
+      position:'fixed',inset:0,zIndex:1000,
+      background:'rgba(0,0,0,0.92)',backdropFilter:'blur(8px)',
+      display:'flex',alignItems:'center',justifyContent:'center',
+      cursor:'zoom-out',padding:20,
+    }}>
+      <img src={src} alt={alt} onClick={e=>e.stopPropagation()} style={{
+        maxWidth:'92vw',maxHeight:'90vh',borderRadius:12,
+        boxShadow:'0 32px 80px rgba(0,0,0,0.8)',objectFit:'contain',cursor:'default',
+      }}/>
+      <button onClick={onClose} style={{
+        position:'fixed',top:20,right:24,background:'rgba(255,255,255,0.1)',
+        border:'1px solid rgba(255,255,255,0.2)',color:'#fff',
+        width:40,height:40,borderRadius:'50%',fontSize:20,cursor:'pointer',
+        display:'flex',alignItems:'center',justifyContent:'center',
+      }}>✕</button>
+    </div>
+  )
 }
 
 /* ── Data ───────────────────────────────────────────────────────────── */
@@ -141,7 +143,7 @@ const DATAVIZ = [
     link:null, color:'#a3e635',
   },
   {
-    id:6, title:'HR Analytics Board', tool:'Tableau',
+    id:6, title:'HR Analytics Board', tool:'Power BI',
     image:'/images/hr.png',
     link:null, color:'#818cf8',
   },
@@ -155,6 +157,8 @@ const SKILLS = [
   { label:'Data & BI',  chips:['Power BI','Tableau','Excel','Oracle APEX'] },
   { label:'Tools',      chips:['Git','GitHub','VS Code','Railway','Vercel','Netlify'] },
 ]
+
+const TOOL_COLORS = { 'Tableau':'#6366f1', 'Power BI':'#f59e0b', 'Interactive Dashboard':'#06b6d4' }
 
 /* ── Nav ─────────────────────────────────────────────────────────────── */
 function Nav() {
@@ -264,8 +268,32 @@ function About() {
   return (
     <section className="section" id="about">
       <FadeUp>
-        <div className="section-label">Who I am</div>
-        <h2 className="section-title">About me</h2>
+        <div className="section-label">
+          <span style={{ color: '#4A90D9', fontWeight: 500 }}>
+            Who I am
+          </span>
+        </div>
+        <h2 className="section-title" style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          lineHeight: 1.1,
+          marginTop: '8px'
+        }}>
+          <span style={{ 
+            color: 'var(--text-primary)', 
+            fontSize: '3.5rem',
+            fontWeight: 700
+          }}>
+            About
+          </span>
+          <span style={{ 
+            color: '#4A90D9', 
+            fontSize: '3.5rem',
+            fontWeight: 700
+          }}>
+            me
+          </span>
+        </h2>
       </FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
@@ -325,6 +353,7 @@ function About() {
   )
 }
 
+/* ── Project card ────────────────────────────────────────────────────── */
 function ProjCard({ p, i }) {
   const [lb, setLb] = useState(false)
   return (
@@ -338,7 +367,7 @@ function ProjCard({ p, i }) {
               style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'top'}}/>
           ) : (
             <>
-              <div className="proj-thumb-bg" style={{background:p.g,position:'absolute',inset:0}}/>
+              <div className="proj-thumb-bg" style={{background:p.gradient,position:'absolute',inset:0}}/>
               <div style={{position:'relative',zIndex:1,display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
                 <div className="proj-thumb-icon">{p.emoji}</div>
               </div>
@@ -365,38 +394,27 @@ function ProjCard({ p, i }) {
   )
 }
 
-/* ── Project card ────────────────────────────────────────────────────── */
-
 /* ── Viz card ────────────────────────────────────────────────────────── */
 function VizCard({ d, i }) {
-  const toolColor = { 'Tableau':'#6366f1','Power BI':'#f59e0b','Interactive Dashboard':'#06b6d4' }
-  const clr = toolColor[d.tool] || '#6366f1'
+  const clr = TOOL_COLORS[d.tool] || '#6366f1'
+  const [lb, setLb] = useState(false)
   return (
-    <FadeUp delay={i*70}>
+    <FadeUp key={d.id} delay={i*65}>
+      {lb && <Lightbox src={d.image} alt={d.title} onClose={() => setLb(false)}/>}
       <div className="viz-card">
-        <div className="viz-thumb">
-          <img src={d.image} alt={d.title} loading="lazy"/>
-          <div className="viz-thumb-overlay">
-            {d.link ? (
-              <a href={d.link} className="overlay-btn overlay-btn-primary" target="_blank" rel="noreferrer">
-                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                View Dashboard
-              </a>
-            ) : (
-              <div style={{background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',padding:'8px 18px',borderRadius:8,fontSize:13,fontWeight:600,color:'rgba(255,255,255,0.7)'}}>
-                Screenshot only
-              </div>
-            )}
+        <div className="viz-thumb" style={{cursor:'zoom-in'}} onClick={() => setLb(true)}>
+          <img src={d.image} alt={d.title} loading="lazy"
+            style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'top'}}/>
+          <div className="viz-overlay" onClick={e=>e.stopPropagation()}>
+            <button onClick={e=>{e.stopPropagation();setLb(true)}} className="obtn-s">🔍 View Full</button>
+            {d.link && <a href={d.link} className="obtn-p" target="_blank" rel="noreferrer">Open Dashboard</a>}
           </div>
         </div>
         <div className="viz-body">
           <div className="viz-tool" style={{color:clr,borderColor:`${clr}40`,background:`${clr}12`}}>{d.tool}</div>
           <div className="viz-title">{d.title}</div>
-          {d.link ? (
-            <a href={d.link} className="viz-link" target="_blank" rel="noreferrer">Open dashboard →</a>
-          ) : (
-            <span className="viz-link" style={{opacity:0.4,cursor:'default'}}>Screenshot only</span>
-          )}
+          {d.link ? <a href={d.link} className="viz-link" target="_blank" rel="noreferrer">Open dashboard →</a>
+                  : <span className="viz-link" style={{opacity:.4,cursor:'default'}}>Screenshot only</span>}
         </div>
       </div>
     </FadeUp>
@@ -430,31 +448,7 @@ function DataViz() {
         <p className="section-sub">Interactive dashboards built in Tableau, Power BI, and custom HTML/CSS — turning raw datasets into business insights across 5 industries.</p>
       </FadeUp>
       <div className="viz-grid" style={{marginTop:48}}>
-       {DATAVIZ.map((d,i) => {
-  const clr = TC[d.tool]||'#6366f1'
-  const [lb, setLb] = useState(false)
-  return (
-    <FadeUp key={d.id} delay={i*65}>
-      {lb && <Lightbox src={d.image} alt={d.title} onClose={() => setLb(false)}/>}
-      <div className="viz-card">
-        <div className="viz-thumb" style={{cursor:'zoom-in'}} onClick={() => setLb(true)}>
-          <img src={d.image} alt={d.title} loading="lazy"
-            style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'top'}}/>
-          <div className="viz-overlay" onClick={e=>e.stopPropagation()}>
-            <button onClick={e=>{e.stopPropagation();setLb(true)}} className="obtn-s">🔍 View Full</button>
-            {d.link && <a href={d.link} className="obtn-p" target="_blank" rel="noreferrer">Open Dashboard</a>}
-          </div>
-        </div>
-        <div className="viz-body">
-          <div className="viz-tool" style={{color:clr,borderColor:`${clr}40`,background:`${clr}12`}}>{d.tool}</div>
-          <div className="viz-title">{d.title}</div>
-          {d.link ? <a href={d.link} className="viz-link" target="_blank" rel="noreferrer">Open dashboard →</a>
-                  : <span className="viz-link" style={{opacity:.4,cursor:'default'}}>Screenshot only</span>}
-        </div>
-      </div>
-    </FadeUp>
-  )
-})}
+        {DATAVIZ.map((d,i) => <VizCard key={d.id} d={d} i={i}/>)}
       </div>
     </section>
   )
@@ -506,38 +500,4 @@ function Contact() {
               amna22875@gmail.com
             </a>
             <a href="https://www.linkedin.com/in/amna-shahzad-393955356/" className="contact-link" target="_blank" rel="noreferrer">
-              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              LinkedIn
-            </a>
-            <a href="https://github.com/amnaatgit" className="contact-link" target="_blank" rel="noreferrer">
-              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              GitHub
-            </a>
-          </div>
-        </FadeUp>
-      </div>
-    </section>
-  )
-}
-
-export default function App() {
-  return (
-    <>
-      <Nav/>
-      <Hero/>
-      <div className="divider"/>
-      <About/>
-      <div className="divider"/>
-      <Projects/>
-      <div className="divider"/>
-      <DataViz/>
-      <div className="divider"/>
-      <Education/>
-      <div className="divider"/>
-      <Contact/>
-      <footer className="footer">
-        © 2025 Amna Shahzad · BS Computer Science · NED University · Built with React + Vite
-      </footer>
-    </>
-  )
-}
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046
