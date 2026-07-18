@@ -205,8 +205,7 @@ function Hero() {
             </a>
           </div>
         </div>
-
-        {/* Terminal card */}
+About Me        {/* Terminal card */}
         <div className="hero-card">
           <div className="hero-card-bar">
             <div className="dot dot-r"/><div className="dot dot-y"/><div className="dot dot-g"/>
