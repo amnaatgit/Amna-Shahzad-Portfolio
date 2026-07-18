@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-
 /* ── Typewriter ─────────────────────────────────────────────────────── */
 function useTypewriter(words, speed = 80, pause = 1800) {
   const [display, setDisplay] = useState('')
@@ -238,7 +237,7 @@ function About() {
       <FadeUp>
        
        <div className="section-label">About me</div>
-        <h2 className="section-title">Where full-stack development<br/>meets data storytelling</h2>
+        <h2 className="section-title"><span style={{color:'var(--navy)'}}>About Me</span><br/>meets data storytelling</h2>
       </FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
