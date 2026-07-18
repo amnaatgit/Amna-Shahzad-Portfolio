@@ -221,12 +221,37 @@ function About() {
   return (
     <section className="section" id="about">
       <FadeUp>
-        <div className="section-label">About me</div>
-        <h2 className="section-title">  
-            <span style={{display:'block',color:'var(--text2)',fontSize:'55%',fontWeight:400,marginBottom:6}}>Who I am </span>
-            <span className="name-grad">About me</span>
-          </h2>
-      </FadeUp>
+  <div className="section-label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <span style={{ 
+      color: '#4A90D9', 
+      fontWeight: 600,
+      fontSize: '1rem',
+      letterSpacing: '1px'
+    }}>
+      Who I am
+    </span>
+    <span style={{ 
+      color: 'var(--text2)', 
+      fontSize: '1rem'
+    }}>
+      —
+    </span>
+  </div>
+  
+  <h2 className="section-title">
+    <span style={{
+      background: 'linear-gradient(135deg, var(--text-primary) 40%, #4A90D9 60%)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text',
+      fontSize: '4rem',
+      fontWeight: 700,
+      display: 'inline-block'
+    }}>
+      About me
+    </span>
+  </h2>
+</FadeUp>
       <div className="about-grid">
         <FadeUp delay={100}>
           <div className="about-text">
